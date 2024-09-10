@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>เข้าสู่ระบบ Book Store</title>
+  </head>
+  <body>
+    <nav class="nav-main">
+      <div class="container">
+        <div class="nav-main__item">
+          <div class="nav-main__item-left">
+            <div class="nav-main__item-logo">
+              <a href="index.html"><img src="./img/icon.png" alt="" /></a>
+            </div>
+            <a href="index.html">หน้าแรก</a>
+            <a href="products.html">หนังสือ</a>
+          </div>
+          <div class="nav-main__item-right">
+            <a href="register.html">สมัครสมาชิก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+            <a href="cart.html"
+              ><i class="fa-solid fa-cart-shopping"></i
+              ><span id="cart-count">0</span></a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="login-main">
+      <div class="container">
+        <div class="login-main__item">
+          <div class="login-main__item-logo">
+            <img src="./img/icon.png" alt="" />
+          </div>
+          <div class="login-main__item-form">
+            <h2>เข้าสู่ระบบ</h2>
+            <form>
+              <div class="login-main__item-form--user">
+                <input
+                  type="username"
+                  placeholder="หมายเลขโทรศัพท์ / Email / ชื่อผู้ใช้"
+                />
+              </div>
+              <div class="login-main__item-form--password">
+                <input type="password" placeholder="รหัสผ่าน" />
+              </div>
+              <div class="login-main__item-form--btn">
+                <button class="login-main__item-form--btn_item">
+                  เข้าสู่ระบบ
+                </button>
+              </div>
+            </form>
+            <a href="#">ลืมรหัสผ่าน ?</a>
+            <p>หรือ</p>
+            <div class="login-main__item-form-other">
+              <div>
+                <button class="login-main__item-form--btn-facebook">
+                  <i class="fa-brands fa-facebook"></i> เข้าสู่ระบบด้วย Facebook
+                </button>
+              </div>
+              <div>
+                <button class="login-main__item-form--btn-google">
+                  <i class="fa-brands fa-google"></i> เข้าสู่ระบบด้วย Google
+                </button>
+              </div>
+            </div>
+            <div></div>
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

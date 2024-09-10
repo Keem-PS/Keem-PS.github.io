@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Book Shop</title>
+  </head>
+  <body>
+    <nav class="nav-main">
+      <div class="container">
+        <div class="nav-main__item">
+          <div class="nav-main__item-left">
+            <div class="nav-main__item-logo">
+              <a href="index.html"><img src="./img/icon.png" alt="" /></a>
+            </div>
+            <a href="index.html">หน้าแรก</a>
+            <a href="products.html">หนังสือ</a>
+          </div>
+          <div class="nav-main__item-right">
+            <a href="register.html">สมัครสมาชิก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+            <a href="cart.html"
+              ><i class="fa-solid fa-cart-shopping"></i
+              ><span id="cart-count">0</span></a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="cart-main">
+      <div class="container">
+        <div class="cart-main-container" >
+          <h2>ตะกร้าสินค้า</h2>
+          <div id="cart-item-list">
+          </div>
+          </div>
+          <div class="cart-summary" id="cart-summary">
+            <div>
+              คำสั่งซื้อทั้งหมด : <span id="cart-total">0 บาท</span>
+            </div>
+            <div>
+              <button id="checkout-btn" onclick="showCheckoutPage()">ชำระสินค้า</button>
+            </div>
+          </div>
+          <div id="checkout-container"></div>
+        </div>
+      </div>
+    </section>
+    
+    <script src="script.js"></script>
+
+    <script>
+
+
+let carts = JSON.parse(localStorage.getItem('cart')) || [];
+
+function renderCart() {
+  const cartItemsContainer = document.getElementById('cart-item-list');
+  cartItemsContainer.innerHTML = ''; // Clear the container before re-rendering
+
+  let total = 0;
+
+  carts.forEach((item, index) => {
+    total += parseFloat(item.price) * item.quantity;
+
+    const cartItemHTML = `
+    <div class="cart-item" data-id="${item.id}">
+      <img class="cart-item__img" src="${item.img}" alt="">
+      <h5 class="cart-item__productName">${item.productName}</h5>
+      <h5 class="cart-item__price">${(parseFloat(item.price) * item.quantity).toFixed(2)} บาท</h5>
+      <div class="addOrDel">
+        <button class="btn-cart" id="delItem" onclick="deleteItem(${index})">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <span>${item.quantity}</span>
+        <button class="btn-cart" id="addItem" onclick="updateItem(${index})">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </div>
+    `;
+    cartItemsContainer.innerHTML += cartItemHTML;
+  });
+
+  document.getElementById('cart-total').innerText = `${total.toFixed(2)} บาท`;
+  updateCartCount()
+}
+
+function updateCartCount() {
+  const cartCountElement = document.getElementById('cart-count');
+  const totalItems = carts.reduce((sum, item) => sum + item.quantity, 0);
+  cartCountElement.innerText = totalItems;
+}
+
+function deleteItem(index) {
+  // Decrease the quantity of the item
+  if (carts[index].quantity > 1) {
+    carts[index].quantity -= 1;
+  } else {
+    // If quantity is 1 or less, remove the item from the cart
+    carts.splice(index, 1);
+  }
+
+  // Update localStorage and re-render the cart
+  localStorage.setItem('cart', JSON.stringify(carts));
+
+  renderCart();
+  updateCartCount()
+}
+
+function updateItem(index) {
+  // Increase the quantity of the item
+  carts[index].quantity += 1;
+
+  // Update localStorage and re-render the cart
+  localStorage.setItem('cart', JSON.stringify(carts));
+  renderCart();
+  updateCartCount()
+}
+
+// Initial render of the cart
+renderCart();
+
+
+
+
+function showCheckoutPage() {
+  const cartItemsContainer = document.getElementById('cart-item-list');
+  const cartItemSummary = document.getElementById('cart-summary')
+  const checkoutContainer = document.getElementById('checkout-container');
+
+  cartItemsContainer.style.display = 'none';
+  cartItemSummary.style.display = 'none'
+  checkoutContainer.innerHTML = ''; // Clear checkout container
+
+  let total = 0;
+
+  // Display cart items for checkout
+  carts.forEach((item) => {
+    total += parseFloat(item.price) * item.quantity;
+
+    const checkoutItemHTML = `
+      <div class="cart-item">
+        <img class="cart-item__img" src="${item.img}" alt="">
+        <h5 class="cart-item__productName">${item.productName}</h5>
+        <h5 class="cart-item__price">${(parseFloat(item.price) * item.quantity).toFixed(2)} บาท</h5>
+        <span>จำนวน: ${item.quantity}</span>
+      </div>
+    `;
+
+    checkoutContainer.innerHTML += checkoutItemHTML;
+  });
+
+  // Add total price and payment form
+  const checkoutFormHTML = `
+    <div class="checkout-total">
+      <div class="total">
+          คำสั่งซื้อทั้งหมด : <span id="cart-total">${total.toFixed(2)} บาท</span>
+      </div>
+    <div class="shipping-info">
+      <h3 ">รายละเอียดการจัดส่ง</h3>
+      <div class="checkout-box">
+      <div>ชื่อ-นามสกุล :</div>
+      <input class="input-text" type="text" id="name" name="name" required>
+      <div>
+      
+      <div class="checkout-box">
+      <label>ที่อยู่ :</label>
+      <div>
+      <div>
+      <textarea class="input-text" required></textarea>
+      <div>
+
+      <div class="checkout-box">
+      <label>เบอร์โทรศัพท์ :</label>
+      <div>
+        <div>
+      <input class="input-text" type="text" id="phone" name="phone" required>
+      <div>
+    </div>
+
+    <div class="payment-method">
+      <h3>วิธีการชำระเงิน</h3>
+      <div>
+        <input type="radio" name="payment" value="credit-card" required>
+        <i class="fa-regular fa-credit-card"></i> บัตรเครดิต
+      </div>
+      <div>
+        <input type="radio" name="payment" value="bank-transfer" required>
+        <i class="fa-solid fa-building-columns"></i> โอนเงินผ่านธนาคาร
+      </div>
+      <div>
+        <input type="radio" name="payment" value="cod" required>
+        <i class="fa-solid fa-money-bill"></i> เก็บเงินปลายทาง
+      </div>
+            <div>
+        <input type="radio" name="payment" value="paypal" required>
+        <i class="fa-brands fa-cc-paypal"></i> PayPal
+      </div>
+            <div class="total">
+          ยอดชำระเงินทั้งหมด : <span id="cart-total">${total.toFixed(2)} บาท</span>
+      </div>
+    </div>
+    <div class="btn-confirm">
+    <button id="confirm-order-btn">ยืนยันการสั่งซื้อ</button>
+    </div>
+  `;
+
+  checkoutContainer.innerHTML += checkoutFormHTML;
+}
+
+
+    </script>
+  </body>
+</html>
